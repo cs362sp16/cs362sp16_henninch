@@ -34,6 +34,112 @@ int* kingdomCards(int k1, int k2, int k3, int k4, int k5, int k6, int k7,
   return k;
 }
 
+int remodelF(int choice2, int choice1, int handPos, int currentPlayer, struct gameState *state){
+	int j;
+	int i;
+	j = state->hand[currentPlayer][choice1];  //store card we will trash
+
+      if ( (getCost(state->hand[currentPlayer][choice1]) + 2) > getCost(choice2) )
+	{
+	  return -1;
+	}
+
+      gainCard(choice2, state, 0, currentPlayer);
+
+      //discard card from hand
+      discardCard(handPos, currentPlayer, state, 0);
+
+      //discard trashed card
+      for (i = 0; i < state->handCount[currentPlayer]; i++)
+	{
+	  if (state->hand[currentPlayer][i] == j)
+	    {
+	      discardCard(i, currentPlayer, state, 0);			
+	      break;
+	    }
+	}
+	return 0;
+}
+
+void cutpurseF(int currentPlayer, int handPos, struct gameState* state){
+	  updateCoins(currentPlayer, state, 2);
+	  int i;
+	  int j;
+	  int k;
+	  for (i = 0; i < state->numPlayers; i++)
+	{
+	  if (i != currentPlayer)
+		{
+		  for (j = 0; j < state->handCount[i]; j++)
+		{
+		  if (state->hand[i][j] == copper)
+			{
+			  discardCard(j, i, state, 0);
+			  break;
+			}
+		  if (j == state->handCount[i])
+			{
+			  for (k = 0; k < state->handCount[i]; k++)
+			{
+			  if (DEBUG)
+				printf("Player %d reveals card number %d\n", i, state->hand[i][k]);
+			}	
+			  break;
+			}		
+		}
+					
+		}
+				
+	}				
+
+      //discard played card from hand
+      discardCard(handPos, currentPlayer, state, 0);
+}
+
+void sea_hagF(struct gameState* state,int currentPlayer){
+	int i;
+    for (i = 0; i < state->numPlayers; i++){
+		if (i != currentPlayer){
+		  state->discard[i][state->discardCount[i]] = state->deck[i][state->deckCount[i]--];			    
+		  state->deckCount[i]--;
+		  state->discardCount[i]++;
+		  state->deck[i][state->deckCount[i]--] = curse; //Top card now a curse
+		}
+    }	
+}	
+
+void council_roomF(struct gameState* state,int currentPlayer,int handPos){
+      int i;
+	  for (i = 0; i < 4; i++)
+	{
+	  drawCard(currentPlayer, state);
+	}
+			
+      //+1 Buy
+      //state->numBuys++;				added to mess it up a little for assignment 1
+			
+      //Each other player draws a card
+      for (i = 0; i < state->numPlayers; i++)
+	{
+	  if ( i != currentPlayer )
+	    {
+	      drawCard(i, state);
+	    }
+	}
+			
+      //put played card in played card pile
+      discardCard(handPos, currentPlayer, state, 0);
+			
+}
+
+void outpostF(struct gameState* state,int handPos,int currentPlayer){
+      //set outpost flag
+      state->outpostPlayed++;
+			
+      //discard card
+      //discardCard(handPos, currentPlayer, state, 0);			added to mess up the behavior for assignment 1
+}
+
 int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
 		   struct gameState *state) {
 
@@ -689,7 +795,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 			
     case council_room:
       //+4 Cards
-	  council_room(state,currentPlayer,handPos);
+	  council_roomF(state,currentPlayer,handPos);
       return 0;
 			
     case feast:
@@ -784,9 +890,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 			
     case remodel:			
-		remodel(choice2, currentPlayer, state);
-      
-      return 0;
+		return remodelF(choice2, choice1, handPos, currentPlayer, state);
 		
     case smithy:
       //+3 Cards
@@ -1064,7 +1168,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case cutpurse:
-	  cutpurse(currentPlayer, handPos, state);
+	  cutpurseF(currentPlayer, handPos, state);
       return 0;
 
 		
@@ -1086,7 +1190,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case outpost:
-		outpost(state,handPos,currentPlayer);
+		outpostF(state,handPos,currentPlayer);
       return 0;
 		
     case salvager:
@@ -1106,7 +1210,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case sea_hag:
-	  sea_hag(state,currentPlayer);
+	  sea_hagF(state,currentPlayer);
       return 0;
 		
     case treasure_map:
@@ -1248,103 +1352,5 @@ int updateCoins(int player, struct gameState *state, int bonus)
   return 0;
 }
 
-void remodel(int choice2, int currentPlayer, struct gameState *state){
-	int j;
-	j = state->hand[currentPlayer][choice1];  //store card we will trash
-
-      if ( (getCost(state->hand[currentPlayer][choice1]) + 2) > getCost(choice2) )
-	{
-	  return -1;
-	}
-
-      gainCard(choice2, state, 0, currentPlayer);
-
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-
-      //discard trashed card
-      for (i = 0; i < state->handCount[currentPlayer]; i++)
-	{
-	  if (state->hand[currentPlayer][i] == j)
-	    {
-	      discardCard(i, currentPlayer, state, 0);			
-	      break;
-	    }
-	}
-}
-
-void cutpurse(int currentPlayer, int handPos, struct gameState* state){
-	  updateCoins(currentPlayer, state, 2);
-	  for (i = 0; i < state->numPlayers; i++)
-	{
-	  if (i != currentPlayer)
-		{
-		  for (j = 0; j < state->handCount[i]; j++)
-		{
-		  if (state->hand[i][j] == copper)
-			{
-			  discardCard(j, i, state, 0);
-			  break;
-			}
-		  if (j == state->handCount[i])
-			{
-			  for (k = 0; k < state->handCount[i]; k++)
-			{
-			  if (DEBUG)
-				printf("Player %d reveals card number %d\n", i, state->hand[i][k]);
-			}	
-			  break;
-			}		
-		}
-					
-		}
-				
-	}				
-
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-}
-
-void sea_hag(struct gameState* state,int currentPlayer){
-    for (i = 0; i < state->numPlayers; i++){
-		if (i != currentPlayer){
-		  state->discard[i][state->discardCount[i]] = state->deck[i][state->deckCount[i]--];			    
-		  state->deckCount[i]--;
-		  state->discardCount[i]++;
-		  state->deck[i][state->deckCount[i]--] = curse; //Top card now a curse
-		}
-    }	
-}	
-
-void council_room(struct gameState* state,int currentPlayer,int handPos){
-      for (i = 0; i < 4; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //+1 Buy
-      //state->numBuys++;				added to mess it up a little for assignment 1
-			
-      //Each other player draws a card
-      for (i = 0; i < state->numPlayers; i++)
-	{
-	  if ( i != currentPlayer )
-	    {
-	      drawCard(i, state);
-	    }
-	}
-			
-      //put played card in played card pile
-      discardCard(handPos, currentPlayer, state, 0);
-			
-}
-
-void outpost(struct gameState* state,int handPos,int currentPlayer){
-      //set outpost flag
-      state->outpostPlayed++;
-			
-      //discard card
-      //discardCard(handPos, currentPlayer, state, 0);			added to mess up the behavior for assignment 1
-}
 //end of dominion.c
 

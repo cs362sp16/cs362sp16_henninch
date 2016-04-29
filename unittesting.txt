@@ -1,0 +1,5 @@
+A few problems that I ran into while unit testing: first, the makefile only manages to get 
+the first unit test results into the output file. I know the other unit tests run fine, so
+I'm not sure why this happens. Other than that, and a few other syntax issues, the unit testing
+went smoothly. the drawcard() and compare() functions are not functioning properly at all,
+and will need to be fixed as these are important pieces of many other card effects and functions,

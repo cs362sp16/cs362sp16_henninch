@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include "rngs.h"
 #include <stdlib.h>
-#include "dominion.c"
 
 int main (int argc, char** argv) {
   struct gameState G;

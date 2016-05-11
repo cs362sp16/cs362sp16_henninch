@@ -1,0 +1,4 @@
+the random testing went much better than the unit testing, both in how I felt designing the tests, and in how the tests preformed.
+the random testing tests each card 300 times with random deck sizes, players, and discard cards. the coverage and fault detection was
+better than the unit testing, though whether that speaks to how effective the random tests are or to how poor my unit tests were is 
+sort of up in the air.

@@ -1,7 +1,6 @@
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include "rngs.h"
-#include <assert.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -138,7 +137,7 @@ void outpostF(struct gameState* state,int handPos,int currentPlayer){
       state->outpostPlayed++;
 			
       //discard card
-      //discardCard(handPos, currentPlayer, state, 0);			added to mess up the behavior for assignment 1
+      discardCard(handPos, currentPlayer, state, 0);			
 }
 
 int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
@@ -1250,7 +1249,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag)
 {
-	
+	handPos = 1;
   //if card is not trashed, added to Played pile 
   if (trashFlag < 1)
     {

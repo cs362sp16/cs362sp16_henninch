@@ -116,7 +116,7 @@ void council_roomF(struct gameState* state,int currentPlayer,int handPos){
 	}
 			
       //+1 Buy
-      //state->numBuys++;				added to mess it up a little for assignment 1
+      state->numBuys++;
 			
       //Each other player draws a card
       for (i = 0; i < state->numPlayers; i++)

@@ -1,0 +1,8 @@
+the differences were found without much hassle. I
+think most of these are occuring from my dominion's
+drawCard function, which doesn't appear to be working.
+I don't know why this is, as I can't remember changing that
+function, but I'm sure that's causing a lot of differences. 
+So with that in mind I can say for sure that my dominion game
+is definitely wrong, but I can't say for sure if the other one is 
+right.

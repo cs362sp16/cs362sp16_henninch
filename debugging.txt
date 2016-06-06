@@ -1,0 +1,13 @@
+Such extensive debugging is something that I haven't had a lot of experience with until this class. In the beginning I used unit testing and simple 
+print statements to do a small amount of debugging, and found that much of what I had intuitively learned from programming in other classes were
+defined concepts in testing. specifically, rule #1 and #5 from Agan's principles were things that I had been trying to stick to in other classes.
+for instance, I initially started trying to write unit tests for cards without really knowing how to play dominion. while this worked for some of the more
+basic cards, I wasn't able to write a meaningful unit test for a more complicated card without knowing what specifically that card was suppose to do
+inside the game. I've also suffered from ignoring Agan's rule about fixing one thing at a time. There are many reasons why changing one thing at a 
+time is important. while I was writing my random tester for one of the assignments in this class, I ended up making a few poorly thought out
+changes to how the compare and draw card functions worked before getting sucked back in to my random tester. Down the road I forgot that 
+I had made these changes in the first place and ended up being stuck for hours wondering what was happening with my code. In the end, I had 
+to use gcov and gdb to figure out where a critical fault was occuring and put a stop to it. upon finding the fault was in code that I had changed
+half mindedly while fixing something else, I realized how important focusing on one problem at a time is.
+Over all, I think the process of learning to find and fix bugs in my code has been a series of warnings, ignoring those warnings, and regretting 
+ignoring those warnings. this process of learning by failing may be slightly brutal, but it has been educational. 

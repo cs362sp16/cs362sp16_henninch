@@ -1,0 +1,16 @@
+TO: 
+	Nawaf Almutairi 
+	almutnaw
+
+SUMMARY:
+	for loop in tribute case for cardEffect is lowering it's own stopping case as it runs
+
+SEVERITY: 
+	Critical	
+
+DETAILS:
+	on line 1056 of dominion.c a for loop ( for (i = 0; i < state->discardCount[nextPlayer]; i++){..) begins. however, inside this for loop (among other things),
+	is the line " state->discardCount[nextPlayer]--;". this means that state->discardCount[nextPlayer] is being decramented as the for loop, who's
+	stopping case is also state->discardCount[nextPlayer], runs. this makes the for loop at this part of the cardEffect function logically faulty, and thus
+	effects the functionality of the tribute card as a whole. the fix is easy, only requiring the deletion of the "state->discardCount[nextPlayer]--;" line and
+	the addition of a line (state->discardCount[nextPlayer]=0;) after the end of the for loop.

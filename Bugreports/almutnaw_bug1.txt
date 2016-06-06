@@ -1,0 +1,14 @@
+TO: 
+	Nawaf Almutairi 
+	almutnaw
+
+SUMMARY:
+	Adventurer card unit test doesn't test the effect of the adventurer card
+
+SEVERITY: 
+	moderate	
+
+DETAILS:
+	Due to how the adventurer card was refactored, the cardEffect function will always return 0 (which in the unit test for the card indicates that adventurer
+	executed correctly), regardless of the effect of the adventurer card. the unit test needs to be changed to check the variables relevant to the adventurer
+	card's effects, namely the gaining of two treasure cards into the players hand, and the incrementation of drawnTreasure by two. 

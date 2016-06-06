@@ -1,0 +1,15 @@
+TO: 
+	Nawaf Almutairi 
+	almutnaw
+
+SUMMARY:
+	Adventurer card will only loop until one treasure card has been drawn, not two (as the card should)
+
+SEVERITY: 
+	Critical	
+
+DETAILS:
+	the adventurer card function is occurs in a while loop: "while(drawntreasure<1){...." 
+	the adventurer card should allow the player to draw two treasure cards and then exit,
+	but with this loop it will only execute untill the player draws one treasure card. the 
+	function can be easily fixed by changing "while(drawntreasure<1){.." to "while(drawntreasure<2){.."

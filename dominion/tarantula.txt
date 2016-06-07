@@ -1,0 +1,7 @@
+I'm actually surprised with how well my implementation of tarantula works. While it only gives a really general block of code that is connected to a 
+failing unit test, it does a good job of visualizing what parts of the code are involved in large numbers of bugs. one of the bugs that was pretty clear
+was the bug involved in the adventurer card. It clearly demonstrates where the problem with the code is. overall, I think tarantula implementation was 
+a success. 
+
+P.S. - the tarantula.out file in the repository is the output of my tarantula implementation, but for some reason it doesn't display text when that
+			text is printed to a file. not sure why. if it is just run normally it will color text based on severity though.

@@ -95,6 +95,29 @@ void cutpurseF(int currentPlayer, int handPos, struct gameState* state){
       //discard played card from hand
       discardCard(handPos, currentPlayer, state, 0);
 }
+void adventurerF(struct gameState* state,int currentPlayer, int handPos, int drawntreasure){
+	int temphand[MAX_HAND];
+	int z = 0;
+	int cardDrawn;
+	while(drawntreasure<2){
+	if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
+	  shuffle(currentPlayer, state);
+	}
+	drawCard(currentPlayer, state);
+	int cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
+	if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+	  drawntreasure++;
+	else{
+	  temphand[z]=cardDrawn;
+	  state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+	  z++;
+	}
+      }
+      while(z-1>=0){
+	state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
+	z=z-1;
+      }
+}
 
 void sea_hagF(struct gameState* state,int currentPlayer){
 	int i;
@@ -114,9 +137,8 @@ void council_roomF(struct gameState* state,int currentPlayer,int handPos){
 	{
 	  drawCard(currentPlayer, state);
 	}
-			
       //+1 Buy
-      state->numBuys++;
+      state->numBuys++;				
 			
       //Each other player draws a card
       for (i = 0; i < state->numPlayers; i++)
@@ -631,7 +653,7 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state) {
 int drawCard(int player, struct gameState *state)
 {	int count;
   int deckCounter;
-  if (state->deckCount[player] <= 0){//Deck is empty
+if (state->deckCount[player] <= 0){//Deck is empty
     
     //Step 1 Shuffle the discard pile back into a deck
     int i;
@@ -676,11 +698,11 @@ int drawCard(int player, struct gameState *state)
     if (DEBUG){//Debug statements
       printf("Current hand count: %d\n", count);
     }
-
     deckCounter = state->deckCount[player];//Create holder for the deck count
     state->hand[player][count] = state->deck[player][deckCounter - 1];//Add card to the hand
     state->deckCount[player]--;
     state->handCount[player]++;//Increment hand count
+
   }
 
   return 0;
@@ -773,24 +795,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-      while(drawntreasure<2){
-	if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
-	  shuffle(currentPlayer, state);
-	}
-	drawCard(currentPlayer, state);
-	cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
-	if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
-	  drawntreasure++;
-	else{
-	  temphand[z]=cardDrawn;
-	  state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
-	  z++;
-	}
-      }
-      while(z-1>=0){
-	state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
-	z=z-1;
-      }
+	  adventurerF(state,currentPlayer,handPos,drawntreasure);
       return 0;
 			
     case council_room:
